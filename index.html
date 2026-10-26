@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>飲水記錄</title>
+<meta name="description" content="每日飲水記錄">
+<meta name="theme-color" content="#3b82f6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="飲水記錄">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div>
+      <div class="hello" id="hello">早晨 👋</div>
+      <div class="date" id="today-label"></div>
+    </div>
+    <div class="streak" id="streak-chip" title="連續達標日數">🔥 <b id="streak">0</b> 日</div>
+  </header>
+
+  <section class="card ring-card">
+    <div class="ring-wrap">
+      <svg class="ring" viewBox="0 0 220 220" aria-hidden="true">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#2563eb"/>
+          </linearGradient>
+          <clipPath id="circle"><circle cx="110" cy="110" r="84"/></clipPath>
+        </defs>
+        <circle cx="110" cy="110" r="100" class="ring-bg"/>
+        <circle cx="110" cy="110" r="100" class="ring-fg" id="ring-fg" stroke="url(#g)"/>
+        <g clip-path="url(#circle)">
+          <circle cx="110" cy="110" r="84" fill="#eff6ff"/>
+          <g id="water" style="transform: translateY(168px)">
+            <path class="wave w1" d="M-220 0 Q-165 -12 -110 0 T0 0 T110 0 T220 0 T330 0 T440 0 V220 H-220 Z"/>
+            <path class="wave w2" d="M-220 4 Q-165 14 -110 4 T0 4 T110 4 T220 4 T330 4 T440 4 V220 H-220 Z"/>
+          </g>
+        </g>
+      </svg>
+      <div class="ring-text">
+        <div class="total"><span id="total">0</span><small>ml</small></div>
+        <button class="goal-btn" id="goal-btn">目標 <span id="goal">2000</span> ml ✏️</button>
+        <div class="pct" id="pct">0%</div>
+      </div>
+    </div>
+    <div class="msg" id="msg">開始飲第一杯水啦 💧</div>
+  </section>
+
+  <section class="quick">
+    <button class="q" data-ml="250"><span class="emo">🥛</span><b>+250</b><small>一杯</small></button>
+    <button class="q" data-ml="500"><span class="emo">🧴</span><b>+500</b><small>一支</small></button>
+    <button class="q" id="custom-btn"><span class="emo">✍️</span><b>自訂</b><small>ml</small></button>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>今日記錄</h2><span class="muted" id="count"></span></div>
+    <ul class="entries" id="entries"></ul>
+    <div class="empty" id="empty">今日仲未有記錄</div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>歷史</h2>
+      <div class="seg" role="tablist">
+        <button class="on" data-range="7">7日</button>
+        <button data-range="30">30日</button>
+      </div>
+    </div>
+    <div class="chart" id="chart"></div>
+    <div class="stats">
+      <div><b id="avg">0</b><small>平均 ml/日</small></div>
+      <div><b id="hit">0</b><small>達標日數</small></div>
+      <div><b id="best">0</b><small>最長連續</small></div>
+    </div>
+  </section>
+
+  <section class="card small-card">
+    <div class="card-head"><h2>備份</h2></div>
+    <p class="muted">資料只存喺呢部手機。可以匯出備份，換機或者資料被清走時再匯入。</p>
+    <div class="row">
+      <button class="btn ghost" id="export-btn">匯出備份</button>
+      <button class="btn ghost" id="import-btn">匯入備份</button>
+      <input type="file" id="import-file" accept="application/json,.json" hidden>
+    </div>
+  </section>
+  <footer class="foot">💧 飲水記錄 · 離線都用得</footer>
+</div>
+
+<div class="sheet-bg" id="sheet-bg" hidden>
+  <form class="sheet" id="sheet">
+    <h3 id="sheet-title">自訂份量</h3>
+    <div class="input-row">
+      <input id="sheet-input" type="number" inputmode="numeric" pattern="[0-9]*" min="1" max="5000" step="1" required>
+      <span>ml</span>
+    </div>
+    <div class="chips" id="sheet-chips"></div>
+    <div class="row">
+      <button type="button" class="btn ghost" id="sheet-cancel">取消</button>
+      <button type="submit" class="btn primary" id="sheet-ok">加入</button>
+    </div>
+  </form>
+</div>
+
+<div class="toast" id="toast" hidden><span id="toast-text"></span><button id="toast-undo">復原</button></div>
+
+<script src="app.js"></script>
+</body>
+</html>
